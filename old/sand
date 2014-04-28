@@ -1,0 +1,27 @@
+#!/usr/bin/python
+import re
+def main():
+    f = open('./gratian.txt', 'r')
+    file = f.read()
+
+    # Corresponds to the column number in the Friedberg edition.
+    # Tag consists of S followed by a 1-4 digit number.
+    # 1642 matches. Numbers can appear more than once but always increasing.
+    # matches = re.findall(r'\<S \d{1,4}\>', file)
+    # print "There should be 1642 matches. There are " + str(len(matches)) + " matches."
+    # for match in matches:
+    #     print match
+    # The S tag never appears on a line by itself.
+    # The S tag always appears on a line with an L tag.
+    matches = re.findall(r'\<S \d{1,4}\>\<L \d{1,2}\>', file)
+    print str(len(matches)) + "matches."
+    for match in matches:
+        print match
+    # matches = re.findall(r'\+.*?\-', file)
+    # matches = re.findall(r'\<.*?\>', file)
+    # re.sub(r'\-.*?\+', '', file)
+    # re.sub(r'\<.*?\>', '', file)
+    # print file
+
+if __name__ == '__main__':
+    main()
