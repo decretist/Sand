@@ -256,8 +256,7 @@ def main():
 
     # count = 897
     count = 1
-    # keys = tuple(open('./toc_r1.txt', 'r')) # uniq toc.txt > dedup.txt
-    keys = tuple(open('./status_of_jews.txt', 'r'))
+    keys = tuple(open('./toc_r1.txt', 'r')) # uniq toc.txt > dedup.txt
     for key in keys:
         key = key.rstrip()
         #
