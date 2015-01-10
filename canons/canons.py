@@ -1,7 +1,8 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 #
+from __future__ import print_function
 import re
 import sys
 def main():
@@ -18,7 +19,7 @@ def main():
             '\<4 \d{1,3}\>|'    # or number of canon,
             '\<P 1\>|'          # or Palea,
             # '\<T [AIPT]\>'    # or inscription or text tag.
-            '\<T [APT]\>'      # or dicta or text tag.
+            '\<T [APT]\>'       # or dicta or text tag.
         ')', file, re.S)        # re.S (re.DOTALL) makes '.' special character match any character including newline.
     # print('expected 4392 canons, found ' + str(len(canons)) + ' canons', file=sys.stderr)
     for canon in canons:

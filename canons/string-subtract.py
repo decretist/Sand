@@ -1,8 +1,9 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 # 14 December 2014
 #
+from __future__ import print_function
 import re
 import sys
 def main():
