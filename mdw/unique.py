@@ -4,7 +4,7 @@
 # 24 April 2014
 # 18 January 2015
 #
-# unique.py | sort -k 2 -n -r
+# unique.py | sort -n -r
 #
 import re
 def main():
@@ -37,7 +37,7 @@ def main():
     keys = dictionary_2r.keys()
     for key in keys:
         if key not in dictionary_1r and key not in stopwords:
-            print(key + '\t' + str(dictionary_2r[key]))
+            print("%2d\t%s" % (dictionary_2r[key], key))
 
 if __name__ == '__main__':
     main()
