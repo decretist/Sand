@@ -45,7 +45,7 @@ def main():
     keys = tuple(open('./toc_1r.txt', 'r'))
     for key in keys:
         key = key.rstrip()
-        dictionary_1r[key] = dictionary_Fr[key].lower() # copy canon from Friedberg dictionary into first-recension dictionary
+        dictionary_1r[key] = dictionary_Fr[key] # copy canon from Friedberg dictionary into first-recension dictionary
         # print(key + '\n' + dictionary_1r[key] + '\n', file=sys.stderr)
         outfilename_r1 = './tmp/auto/1r/' + key + '.txt'
         f = open(outfilename_r1, 'w')
