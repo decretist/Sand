@@ -3683,8 +3683,8 @@ Paulus Apostolus ad Timotheum: "Manus cito nemini imposueris,
 et nichil sine preiudicio facias in alteram partem declinando."
 -+
 <P 1> -[PALEA.+
-<4 1> -C. I.+ <T R> <T R> De eodem.
-<T R> Ex decretis Siluestri Papae in Sinodo Romana c. 9.
+<4 1> -C. I.+ <T R> De eodem.
+<T I> Ex decretis Siluestri Papae in Sinodo Romana c. 9.
 <T T> Nullus acolitorum uel subdiaconorum rem consecratam
 a presbitero aliis porrigat, (quia aliud est minister,
 aliud assistens), nisi tantum supportet, quod ei sacerdos
@@ -9422,7 +9422,7 @@ et Dei condicionis inimicus. -@. 1.+ Si quis, cum
 clericus fuerit, absciderit semetipsum, omnino dampnetur,
 quia suus est homicida.
 <4 5> -C. V.+ <T R> Non producantur ad clerum, qui se ipsos abscidunt.
-<T P> Item ex Concilio Arelatensi II. -[c. 7.]+
+<T I> Item ex Concilio Arelatensi II. -[c. 7.]+
 <T T> Hii, qui se carnali uicio repugnare nescientes abscidunt,
 ad clerum peruenire non possunt.
 <T P> Item Innocentius scribit Felici Nuceriano Episcopo:
@@ -13523,7 +13523,7 @@ portant. Aut certe mensas nummularioum sacerdotum
 dicit scripturas. Nouo enim testamento succedente
 priori, euersae sunt scripturae illorum. -]+ <P 0>
 <P 1> -[PALEA.+
-<4 12> -C. XII.+ <T R> <T R> De eodem.
+<4 12> -C. XII.+ <T R> De eodem.
 <T I> Item ex uerbis Augustini. -(hinc inde collectis, et in
 summam redactis ad Psal. LXX. uers. Quoniam
 non cognoui.)+
@@ -14485,7 +14485,7 @@ frontibus baptizatos crismate tangere debeant, concedimus.
 "Quamuis corepiscopis": -[Dist. LXVIII.]+
 <4 2> -C. II.+ <T R> Presbiteri ultra suum modum contendere non
 presumant.
-<T I> Item Gelasius. <T P>  -[Papa Episcopis per Lucaniam, etc.
+<T I> Item Gelasius. -[Papa Episcopis per Lucaniam, etc.
 epist. V. c. 8.]+
 <T T> Presbiteros ultra suum modum tendere prohibemus,
 nec episcopali fastigio debita sibimet audacter assumere,
@@ -27424,7 +27424,7 @@ antiquam consuetudinem et auctoritatem renouentur. -]+ <P 0>
 <P 1> -[PALEA.+
 <4 6> -C. VI.+ <T R> De eodem.
 <T I> Item ex Concilio Cartaginensi.
-<T R> De precariis, que a rectoribus ecclesiarum inrationabiliter
+<T T> De precariis, que a rectoribus ecclesiarum inrationabiliter
 fiebant, et se suosque successores pena graui
 obligabant, ut facta ipsorum nequiuissent dissoluere, precipimus,
 ut nemo successor in antecessoris sui pena sit
