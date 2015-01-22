@@ -29,7 +29,7 @@ def main():
         dictionary_Fr[key] = rubric
     #
     keys = tuple(open('./toc_1r.txt', 'r'))
-    outfilename_r1 = './tmp/Gratian1.txt'
+    outfilename_r1 = './tmp/all_1r_rubrics.txt'
     f = open(outfilename_r1, 'w')
     for key in keys:
         key = key.rstrip()
@@ -38,7 +38,7 @@ def main():
     f.close
     #
     keys = tuple(open('./toc_2r.txt', 'r'))
-    outfilename_2r = './tmp/Gratian2.txt'
+    outfilename_2r = './tmp/all_2r_rubrics.txt'
     f = open(outfilename_2r, 'w')
     for key in keys:
         key = key.rstrip()
