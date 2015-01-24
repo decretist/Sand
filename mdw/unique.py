@@ -20,6 +20,10 @@ def main():
                 dictionary_1r[key] = 1
         else:
             pass
+    # keys = dictionary_1r.keys()
+    # for key in keys:
+    #     if key not in stopwords:
+    #         print("%2d\t%s" % (dictionary_1r[key], key))
     string = open('./Gratian2.txt', 'r').read()
     words = re.split('\W', string)
     dictionary_2r = {}
