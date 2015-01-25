@@ -7,8 +7,9 @@ import re
 def main():
     flag = False
     lineNumber = 0
+    # pattern = r'\<2 \d{1,3}\>'
+    pattern = r'\<4 \d{1,2}\>'
     # pattern = r'\<T R\>'
-    pattern = r'\<2 \d{1,3}\>'
     f = open('./bones.txt', 'r')
     for line in f:
         lineNumber += 1
