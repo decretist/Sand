@@ -6,43 +6,48 @@
 from __future__ import print_function
 import re
 import sys
-canon_number = ''
-case_number = ''
-distinction_number = ''
-question_number = ''
+citation_stack = []
 table_of_contents = []
 dictionary = {}
 def main():
-    # parse_distinctions(preprocess(open('./part1.txt', 'r').read()))
+    parse_distinctions(preprocess(open('./part1.txt', 'r').read()))
     parse_cases(preprocess(open('./part2.txt', 'r').read()))
-    # print(table_of_contents)
+    print(table_of_contents)
 
 def parse_cases(text):
-    global case_number
+    global citation_stack
     cases = re.findall('(?:\<1 C\>)(.*?)(?=\<1 C\>|$)', text)
     for case in cases:
         case = case.strip(' ')
         m = re.match('\<2 (\d{1,2})\><T Q> (.*?) (?=\<3 1\>)', case)
-        case_number = 'C.' + m.group(1)
+        citation_stack.append('C.' + m.group(1))
         #
-        key = case_number + ' d.init.'
-        table_of_contents.append(key)
-        dictionary[key] = m.group(2)
+        citation_stack.append('d.init.')
+        citation = ' '.join(citation_stack)
+        table_of_contents.append(citation)
+        dictionary[citation] = m.group(2)
+        citation_stack.pop()
         #
         parse_questions(case)
+        citation_stack.pop()
 
 def parse_questions(text):
-    global question_number
+    global citation_stack
     questions = re.findall('(\<3 \d{1,2}\>.*?)(?=\<3 \d{1,2}\>|$)', text)
     for question in questions:
         question = question.strip(' ')
         m = re.match('\<3 (\d{1,2})\> \<T A\> (.*?) (?=\<4 1\>)', question)
         if m:
-            question_number = 'q.' + m.group(1)
-            key = case_number + ' ' + question_number + ' d.a.c.1'
-            table_of_contents.append(key)
-            dictionary[key] = m.group(2)
+            citation_stack.append('q.' + m.group(1))
+            #
+            citation_stack.append('d.a.c.1')
+            citation = ' '.join(citation_stack)
+            table_of_contents.append(citation)
+            dictionary[citation] = m.group(2)
+            citation_stack.pop()
+            #
             parse_canons(question)
+            citation_stack.pop()
         else:
             continue
 
@@ -52,22 +57,28 @@ def parse_distinctions(text):
     for distinction in distinctions:
         distinction = distinction.strip(' ')
         m = re.match('\<2 (\d{1,3})\> \<T A\> (.*?) (?=\<4 1\>)', distinction)
-        distinction_number = 'D.' + m.group(1)
+        citation_stack.append('D.' + m.group(1))
         #
-        key = distinction_number + ' d.a.c.1'
-        table_of_contents.append(key)
-        dictionary[key] = m.group(2)
+        citation_stack.append('d.a.c.1')
+        citation = ' '.join(citation_stack)
+        table_of_contents.append(citation)
+        dictionary[citation] = m.group(2)
+        citation_stack.pop()
         #
         parse_canons(distinction)
+        citation_stack.pop()
 
 def parse_canons(text):
-    global canon_number
+    global citation_stack
     canons = re.findall('(\<4 \d{1,2}\>.*?)(?=\<4 \d{1,2}\>|$)', text)
     for canon in canons:
         canon = canon.strip(' ')
         m = re.match('\<4 (\d{1,2})\>', canon)
-        canon_number = 'c.' + m.group(1)
-        parse_parts(canon)
+        citation_stack.append('c.' + m.group(1))
+        citation = ' '.join(citation_stack)
+        table_of_contents.append(citation)
+        # parse_parts(canon, m.group(1))
+        citation_stack.pop()
 
 def parse_parts(text):
     T_P_flag = False
