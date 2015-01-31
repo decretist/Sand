@@ -19,13 +19,7 @@ def parse_cases(text):
         case = case.strip(' ')
         m = re.match('\<2 (\d{1,2})\><T Q> (.*?) (?=\<3 1\>)', case)
         citation_stack.append('C.' + m.group(1))
-        #
-        citation_stack.append('d.init.')
-        citation = ' '.join(citation_stack)
-        table_of_contents.append(citation)
-        dictionary[citation] = m.group(2)
-        citation_stack.pop()
-        #
+        add_to_dictionary('d.init.', m.group(2))
         parse_questions(case)
         citation_stack.pop()
 
@@ -36,34 +30,23 @@ def parse_questions(text):
         m = re.match('\<3 (\d{1,2})\> \<T A\> (.*?) (?=\<4 1\>)', question)
         if m:
             citation_stack.append('q.' + m.group(1))
-            #
-            citation_stack.append('d.a.c.1')
-            citation = ' '.join(citation_stack)
-            table_of_contents.append(citation)
-            dictionary[citation] = m.group(2)
-            citation_stack.pop()
-            #
+            add_to_dictionary('d.a.c.1', m.group(2))
             parse_canons(question)
             citation_stack.pop()
         else:
-            parse_question(question)
+            parse_special_case_question(question)
 
-def parse_question(question):
-    # parse special-case questions C.11 q.2, C.17 q.3, C.22 q.3, C.29 q.1, and C.33 q.3
+def parse_special_case_question(question):
+    # parse special-case questions C.11 q.2, C.17 q.3, C.22 q.3, C.29 q.1, 
+    # and C.33 q.3 (de Pen.)
     m = re.match('\<3 (\d{1,2})\> \<T A\> (.+)', question)
     citation_stack.append('q.' + m.group(1))
-    #
-    citation_stack.append('d.a.c.1')
-    citation = ' '.join(citation_stack)
-    table_of_contents.append(citation)
-    dictionary[citation] = m.group(2)
-    citation_stack.pop()
-    #
+    add_to_dictionary('d.a.c.1', m.group(2))
     citation = ' '.join(citation_stack)
     if citation == 'C.33 q.3': # de Pen.
         tmp_q = citation_stack.pop() # pop 'q.3'
         tmp_C = citation_stack.pop() # pop 'C.33'
-        parse_depen(preprocess(open('./depen.txt', 'r').read()))
+        parse_de_penitentia(preprocess(open('./de_penitentia.txt', 'r').read()))
         citation_stack.append(tmp_C) # push 'C.33'
         citation_stack.append(tmp_q) # push 'q.3'
     citation_stack.pop()
@@ -74,29 +57,17 @@ def parse_distinctions(text):
         distinction = distinction.strip(' ')
         m = re.match('\<2 (\d{1,3})\> \<T A\> (.*?) (?=\<4 1\>)', distinction)
         citation_stack.append('D.' + m.group(1))
-        #
-        citation_stack.append('d.a.c.1')
-        citation = ' '.join(citation_stack)
-        table_of_contents.append(citation)
-        dictionary[citation] = m.group(2)
-        citation_stack.pop()
-        #
+        add_to_dictionary('d.a.c.1', m.group(2))
         parse_canons(distinction)
         citation_stack.pop()
 
-def parse_depen(text):
+def parse_de_penitentia(text):
     distinctions = re.findall('(?:\<1 DP\>)(.*?)(?=\<1 DP\>|$)', text)
     for distinction in distinctions:
         distinction = distinction.strip(' ')
         m = re.match('\<2 (\d{1,3})\> \<T A\> (.*?) (?=\<4 1\>)', distinction)
         citation_stack.append('de Pen. D.' + m.group(1))
-        #
-        citation_stack.append('d.a.c.1')
-        citation = ' '.join(citation_stack)
-        table_of_contents.append(citation)
-        dictionary[citation] = m.group(2)
-        citation_stack.pop()
-        #
+        add_to_dictionary('d.a.c.1', m.group(2))
         parse_canons(distinction)
         citation_stack.pop()
 
@@ -145,6 +116,13 @@ def parse_parts(text):
                 table_of_contents.append(key)
                 dictionary[key] = m.group(2)
                 T_T_flag = True
+
+def add_to_dictionary(label, text):
+    citation_stack.append(label)
+    citation = ' '.join(citation_stack)
+    table_of_contents.append(citation)
+    dictionary[citation] = text
+    citation_stack.pop()
 
 def preprocess(text):
     text = re.sub(re.compile('\-.*?\+', re.S), '', text) # remove comments
