@@ -13,6 +13,16 @@ def main():
     parse_distinctions(preprocess(open('./part1.txt', 'r').read()))
     parse_cases(preprocess(open('./part2.txt', 'r').read()))
 
+def parse_distinctions(text):
+    distinctions = re.findall('(?:\<1 D\>)(.*?)(?=\<1 D\>|$)', text)
+    for distinction in distinctions:
+        distinction = distinction.strip(' ')
+        m = re.match('\<2 (\d{1,3})\> \<T A\> (.*?) (?=\<4 1\>)', distinction)
+        citation_stack.append('D.' + m.group(1))
+        add_to_dictionary('d.a.c.1', m.group(2))
+        parse_canons(distinction)
+        citation_stack.pop()
+
 def parse_cases(text):
     cases = re.findall('(?:\<1 C\>)(.*?)(?=\<1 C\>|$)', text)
     for case in cases:
@@ -50,16 +60,6 @@ def parse_special_case_question(question):
         citation_stack.append(tmp_C) # push 'C.33'
         citation_stack.append(tmp_q) # push 'q.3'
     citation_stack.pop()
-
-def parse_distinctions(text):
-    distinctions = re.findall('(?:\<1 D\>)(.*?)(?=\<1 D\>|$)', text)
-    for distinction in distinctions:
-        distinction = distinction.strip(' ')
-        m = re.match('\<2 (\d{1,3})\> \<T A\> (.*?) (?=\<4 1\>)', distinction)
-        citation_stack.append('D.' + m.group(1))
-        add_to_dictionary('d.a.c.1', m.group(2))
-        parse_canons(distinction)
-        citation_stack.pop()
 
 def parse_de_penitentia(text):
     distinctions = re.findall('(?:\<1 DP\>)(.*?)(?=\<1 DP\>|$)', text)
