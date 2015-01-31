@@ -36929,6 +36929,10 @@ uidelicet, ut in his omnibus sacerdotis expectetur
 ordinatio, ut, iuxta quod etatem aptam prospexerit,
 penitenciae absolutionis tribuat legem.
 <3 3> -QUESTIO III.+
+-GRATIANUS.+
+<T A> His breuiter decursis, in quibus extra negocii finem aliquantulum
+euagati sumus, ad propositae causae terciam questionem
+pertractandam, qua queritur:
 <3 4> -QUESTIO IV.+
 -GRATIANUS.+
 -I. Pars.+ <T A> Quod autem orationis tempore coniugali operi
