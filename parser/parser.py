@@ -12,7 +12,6 @@ dictionary = {}
 def main():
     parse_distinctions(preprocess(open('./part1.txt', 'r').read()))
     parse_cases(preprocess(open('./part2.txt', 'r').read()))
-    print(table_of_contents)
 
 def parse_cases(text):
     global citation_stack
@@ -49,7 +48,26 @@ def parse_questions(text):
             parse_canons(question)
             citation_stack.pop()
         else:
-            continue
+            parse_question(question)
+
+def parse_question(question):
+    # parse malformed questions C.11 q.2, C.17 q.3, C.22 q.3, and C.29 q.1
+    global citation_stack
+    m = re.match('\<3 (\d{1,2})\> \<T A\> (.+)', question)
+    if m:
+        citation_stack.append('q.' + m.group(1))
+        print('Warning: malformed question ' + ' '.join(citation_stack), file=sys.stderr)
+        #
+        citation_stack.append('d.a.c.1')
+        citation = ' '.join(citation_stack)
+        table_of_contents.append(citation)
+        dictionary[citation] = m.group(2)
+        citation_stack.pop()
+        #
+        citation_stack.pop()
+    else:
+        print('Warning: malformed question: ' + question)
+        pass
 
 def parse_distinctions(text):
     global distinction_number
