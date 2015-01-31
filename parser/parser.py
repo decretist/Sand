@@ -14,7 +14,6 @@ def main():
     parse_cases(preprocess(open('./part2.txt', 'r').read()))
 
 def parse_cases(text):
-    global citation_stack
     cases = re.findall('(?:\<1 C\>)(.*?)(?=\<1 C\>|$)', text)
     for case in cases:
         case = case.strip(' ')
@@ -31,7 +30,6 @@ def parse_cases(text):
         citation_stack.pop()
 
 def parse_questions(text):
-    global citation_stack
     questions = re.findall('(\<3 \d{1,2}\>.*?)(?=\<3 \d{1,2}\>|$)', text)
     for question in questions:
         question = question.strip(' ')
@@ -51,26 +49,26 @@ def parse_questions(text):
             parse_question(question)
 
 def parse_question(question):
-    # parse malformed questions C.11 q.2, C.17 q.3, C.22 q.3, and C.29 q.1
-    global citation_stack
+    # parse special-case questions C.11 q.2, C.17 q.3, C.22 q.3, C.29 q.1, and C.33 q.3
     m = re.match('\<3 (\d{1,2})\> \<T A\> (.+)', question)
-    if m:
-        citation_stack.append('q.' + m.group(1))
-        print('Warning: malformed question ' + ' '.join(citation_stack), file=sys.stderr)
-        #
-        citation_stack.append('d.a.c.1')
-        citation = ' '.join(citation_stack)
-        table_of_contents.append(citation)
-        dictionary[citation] = m.group(2)
-        citation_stack.pop()
-        #
-        citation_stack.pop()
-    else:
-        print('Warning: malformed question: ' + question)
-        pass
+    citation_stack.append('q.' + m.group(1))
+    #
+    citation_stack.append('d.a.c.1')
+    citation = ' '.join(citation_stack)
+    table_of_contents.append(citation)
+    dictionary[citation] = m.group(2)
+    citation_stack.pop()
+    #
+    citation = ' '.join(citation_stack)
+    if citation == 'C.33 q.3': # de Pen.
+        tmp_q = citation_stack.pop() # pop 'q.3'
+        tmp_C = citation_stack.pop() # pop 'C.33'
+        parse_depen(preprocess(open('./depen.txt', 'r').read()))
+        citation_stack.append(tmp_C) # push 'C.33'
+        citation_stack.append(tmp_q) # push 'q.3'
+    citation_stack.pop()
 
 def parse_distinctions(text):
-    global distinction_number
     distinctions = re.findall('(?:\<1 D\>)(.*?)(?=\<1 D\>|$)', text)
     for distinction in distinctions:
         distinction = distinction.strip(' ')
@@ -86,14 +84,30 @@ def parse_distinctions(text):
         parse_canons(distinction)
         citation_stack.pop()
 
+def parse_depen(text):
+    distinctions = re.findall('(?:\<1 DP\>)(.*?)(?=\<1 DP\>|$)', text)
+    for distinction in distinctions:
+        distinction = distinction.strip(' ')
+        m = re.match('\<2 (\d{1,3})\> \<T A\> (.*?) (?=\<4 1\>)', distinction)
+        citation_stack.append('de Pen. D.' + m.group(1))
+        #
+        citation_stack.append('d.a.c.1')
+        citation = ' '.join(citation_stack)
+        table_of_contents.append(citation)
+        dictionary[citation] = m.group(2)
+        citation_stack.pop()
+        #
+        parse_canons(distinction)
+        citation_stack.pop()
+
 def parse_canons(text):
-    global citation_stack
     canons = re.findall('(\<4 \d{1,2}\>.*?)(?=\<4 \d{1,2}\>|$)', text)
     for canon in canons:
         canon = canon.strip(' ')
         m = re.match('\<4 (\d{1,2})\>', canon)
         citation_stack.append('c.' + m.group(1))
         citation = ' '.join(citation_stack)
+        print(citation, file=sys.stderr)
         table_of_contents.append(citation)
         # parse_parts(canon, m.group(1))
         citation_stack.pop()
