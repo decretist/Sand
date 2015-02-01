@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
-# 23 January 2015
+# 23-31 January 2015
 #
 from __future__ import print_function
 import re
@@ -90,7 +90,9 @@ def parse_canons(text):
         parse_parts(canon)
 
 def parse_parts(text):
+    T_I_flag = False
     T_P_flag = False
+    T_R_flag = False
     T_T_flag = False
     canon_number = citation_stack.pop()
     parts = re.findall('(\<T [AIPRT]\>.*?)(?=\<T [AIPRT]\>|$)', text)
@@ -101,8 +103,12 @@ def parse_parts(text):
         if tag == '<T A>':
             citation = ' '.join(citation_stack) + ' d.a.' + canon_number
             print('Warning: unexpected <T A> tag: ' + citation, file=sys.stderr)
-        if tag == '<T I>' or tag == '<T R>':
-            pass
+        if tag == '<T I>':
+            if T_I_flag:
+                citation = ' '.join(citation_stack) + ' ' + canon_number + ' (inscription)'
+                print('Warning: multiple <T I> tags: ' + citation, file=sys.stderr)
+            else:
+                T_I_flag = True
         if tag == '<T P>':
             if T_P_flag:
                 citation = ' '.join(citation_stack) + ' d.p.' + canon_number
@@ -110,6 +116,12 @@ def parse_parts(text):
             else:
                 add_to_dictionary(' d.p.' + canon_number, m.group(2))
                 T_P_flag = True
+        if tag == '<T R>':
+            if T_R_flag:
+                citation = ' '.join(citation_stack) + ' ' + canon_number + ' (rubric)'
+                print('Warning: multiple <T R> tags: ' + citation, file=sys.stderr)
+            else:
+                T_R_flag = True
         if tag == '<T T>':
             if T_T_flag:
                 citation = ' '.join(citation_stack) + ' ' + canon_number
