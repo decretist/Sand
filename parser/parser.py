@@ -12,6 +12,7 @@ dictionary = {}
 def main():
     parse_distinctions(preprocess(open('./part1.txt', 'r').read()))
     parse_cases(preprocess(open('./part2.txt', 'r').read()))
+    parse_de_consecratione(preprocess(open('./part3.txt', 'r').read()))
 
 def parse_distinctions(text):
     distinctions = re.findall('(?:\<1 D\>)(.*?)(?=\<1 D\>|$)', text)
@@ -65,9 +66,18 @@ def parse_de_penitentia(text):
     distinctions = re.findall('(?:\<1 DP\>)(.*?)(?=\<1 DP\>|$)', text)
     for distinction in distinctions:
         distinction = distinction.strip(' ')
-        m = re.match('\<2 (\d{1,3})\> \<T A\> (.*?) (?=\<4 1\>)', distinction)
+        m = re.match('\<2 (\d)\> \<T A\> (.*?) (?=\<4 1\>)', distinction)
         citation_stack.append('de Pen. D.' + m.group(1))
         add_to_dictionary('d.a.c.1', m.group(2))
+        parse_canons(distinction)
+        citation_stack.pop()
+
+def parse_de_consecratione(text):
+    distinctions = re.findall('(?:\<1 DC\>)(.*?)(?=\<1 DC\>|$)', text)
+    for distinction in distinctions:
+        distinction = distinction.strip(' ')
+        m = re.match('\<2 (\d)\> (?=\<4 1\>)', distinction)
+        citation_stack.append('de Cons. D.' + m.group(1))
         parse_canons(distinction)
         citation_stack.pop()
 
@@ -96,14 +106,14 @@ def parse_parts(text):
         if tag == '<T P>':
             if T_P_flag:
                 citation = ' '.join(citation_stack) + ' d.p.' + canon_number
-                print('Warning: multiple <T P> tags: ' + citation, file=sys.stderr)
+                # print('Warning: multiple <T P> tags: ' + citation, file=sys.stderr)
             else:
                 add_to_dictionary(' d.p.' + canon_number, m.group(2))
                 T_P_flag = True
         if tag == '<T T>':
             if T_T_flag:
                 citation = ' '.join(citation_stack) + ' ' + canon_number
-                print('Warning: multiple <T T> tags: ' + citation, file=sys.stderr)
+                # print('Warning: multiple <T T> tags: ' + citation, file=sys.stderr)
             else:
                 add_to_dictionary(canon_number, m.group(2))
                 T_T_flag = True
