@@ -72,49 +72,40 @@ def parse_de_penitentia(text):
         citation_stack.pop()
 
 def parse_canons(text):
-    canons = re.findall('(\<4 \d{1,2}\>.*?)(?=\<4 \d{1,2}\>|$)', text)
+    canons = re.findall('(\<4 \d{1,3}\>.*?)(?=\<4 \d{1,3}\>|$)', text)
     for canon in canons:
         canon = canon.strip(' ')
-        m = re.match('\<4 (\d{1,2})\>', canon)
+        m = re.match('\<4 (\d{1,3})\>', canon)
         citation_stack.append('c.' + m.group(1))
-        citation = ' '.join(citation_stack)
-        print(citation, file=sys.stderr)
-        table_of_contents.append(citation)
-        # parse_parts(canon, m.group(1))
-        citation_stack.pop()
+        parse_parts(canon)
 
 def parse_parts(text):
     T_P_flag = False
     T_T_flag = False
+    canon_number = citation_stack.pop()
     parts = re.findall('(\<T [AIPRT]\>.*?)(?=\<T [AIPRT]\>|$)', text)
     for part in parts:
         part = part.strip(' ')
         m = re.match('(\<T [AIPRT]\>) (.+)', part)
         tag = m.group(1)
         if tag == '<T A>':
-            # key = distinction_number + ' d.a.' + canon_number
-            key = case_number + ' ' + question_number  + ' d.a.' + canon_number
-            print('Warning: unexpected <T A> tag: ' + key, file=sys.stderr)
+            citation = ' '.join(citation_stack) + ' d.a.' + canon_number
+            print('Warning: unexpected <T A> tag: ' + citation, file=sys.stderr)
         if tag == '<T I>' or tag == '<T R>':
             pass
         if tag == '<T P>':
-            # key = distinction_number + ' d.p.' + canon_number
-            key = case_number + ' ' + question_number + ' d.p.' + canon_number
             if T_P_flag:
-                print('Warning: multiple <T P> tags: ' + key, file=sys.stderr)
+                citation = ' '.join(citation_stack) + ' d.p.' + canon_number
+                print('Warning: multiple <T P> tags: ' + citation, file=sys.stderr)
             else:
-                table_of_contents.append(key)
-                dictionary[key] = m.group(2)
+                add_to_dictionary(' d.p.' + canon_number, m.group(2))
                 T_P_flag = True
         if tag == '<T T>':
-            # key = distinction_number + ' ' + canon_number
-            key = case_number + ' ' + question_number + ' ' + canon_number
             if T_T_flag:
-                print('Warning: multiple <T T> tags: ' + key, file=sys.stderr)
-                pass
+                citation = ' '.join(citation_stack) + ' ' + canon_number
+                print('Warning: multiple <T T> tags: ' + citation, file=sys.stderr)
             else:
-                table_of_contents.append(key)
-                dictionary[key] = m.group(2)
+                add_to_dictionary(canon_number, m.group(2))
                 T_T_flag = True
 
 def add_to_dictionary(label, text):
