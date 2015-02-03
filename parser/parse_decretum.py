@@ -108,10 +108,10 @@ def parse_tagged_texts(text):
 def add_to_dictionary(reference, payload):
     citation_stack.append(reference)
     key = ' '.join(citation_stack)
-    table_of_contents.append(key)
     if key in dictionary:
         dictionary[key].append(payload)
     else:
+        table_of_contents.append(key)
         dictionary[key] = [payload]
     citation_stack.pop()
 

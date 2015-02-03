@@ -3,3 +3,4 @@ canons/tmp/
 mdw/Gratian?.txt
 mdw/samples/
 rubrics/tmp
+*.pyc
