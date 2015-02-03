@@ -19468,11 +19468,11 @@ Istud autem Urbani intelligendum est de illis, quas
 abbates in propriis prediis edificant in uillis uel in castellis suis.
 -[QUESTIO V.]+
 -GRATIANUS.+
-<T A> Tales, etsi ius territorii habeant, tamen potestatem gubernandi
+<4 8> <T A> Tales, etsi ius territorii habeant, tamen potestatem gubernandi
 populum, et spiritualia ministrandi non habent. Quod
 etiam de episcopo intelligendum est.
 Unde Nicolaus Papa ait:
-<4 8> -C. VIII.+  -[I.]+ <T R> Episcopus, qui in alterius diocesi ecclesiam edificat,
+-C. VIII.+  -[I.]+ <T R> Episcopus, qui in alterius diocesi ecclesiam edificat,
 eius consecrationem sibi uendicare non audeat.
 <T T> Si quis episcoporum in alienae ciuitatis territorio pro
 quacumque suorum opportunitate ecclesiam edificare disponit,
