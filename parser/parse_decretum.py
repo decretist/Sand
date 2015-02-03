@@ -2,7 +2,7 @@
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 # 23 January 2015 -
-# 2 February 2015
+# 3 February 2015
 #
 from __future__ import print_function
 import re
@@ -10,10 +10,11 @@ import sys
 citation_stack = []
 table_of_contents = []
 dictionary = {}
-def main():
-    parse_part_1(preprocess(open('./part1.txt', 'r').read()))
-    parse_part_2(preprocess(open('./part2.txt', 'r').read()))
-    parse_part_3(preprocess(open('./part3.txt', 'r').read()))
+def parse_decretum():
+    parse_part_1(preprocess(open('./part_1.txt', 'r').read()))
+    parse_part_2(preprocess(open('./part_2.txt', 'r').read()))
+    parse_part_3(preprocess(open('./part_3.txt', 'r').read()))
+    return(table_of_contents, dictionary)
 
 # D.1-101
 def parse_part_1(text):
@@ -60,12 +61,13 @@ def parse_special_case_questions(question):
     if citation == 'C.33 q.3': # de Pen.
         tmp_q = citation_stack.pop() # pop 'q.3'
         tmp_C = citation_stack.pop() # pop 'C.33'
-        parse_de_penitentia(preprocess(open('./de_penitentia.txt', 'r').read()))
+        parse_de_pen(preprocess(open('./de_pen.txt', 'r').read()))
         citation_stack.append(tmp_C) # push 'C.33'
         citation_stack.append(tmp_q) # push 'q.3'
     citation_stack.pop()
 
-def parse_de_penitentia(text):
+# de Penitentia
+def parse_de_pen(text):
     distinctions = re.findall('(?:\<1 DP\>)(.*?)(?=\<1 DP\>|$)', text)
     for distinction in distinctions:
         distinction = distinction.strip(' ')
@@ -91,7 +93,7 @@ def parse_canons(text):
         canon = canon.strip(' ')
         m = re.match('\<4 (\d{1,3})\>', canon)
         citation_stack.append('c.' + m.group(1))
-        parse_tagged_text(canon)
+        parse_tagged_texts(canon)
         citation_stack.pop()
 
 def parse_tagged_texts(text):
@@ -101,7 +103,7 @@ def parse_tagged_texts(text):
         part = part.strip(' ')
         m = re.match('(\<T [AIPRT]\>) (.+)', part)
         add_to_dictionary(canon_id, (m.group(1), m.group(2)))
-    citation_stack.append(canon_id) # push canon_id back onto the citation stack.
+    citation_stack.append(canon_id) # push canon_id back onto citation stack.
 
 def add_to_dictionary(reference, payload):
     citation_stack.append(reference)
