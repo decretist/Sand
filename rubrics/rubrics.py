@@ -17,7 +17,7 @@ def main():
         '(?:'                   # non-capturing group.
             '\<T [IPT]\>'       # rubric ends with inscription, dictum (post), or text tag.
         ')', file, re.S)        # re.S (re.DOTALL) makes '.' special character match any character including newline.
-    print('expected 3422 rubrics, found ' + str(len(rubrics)) + ' rubrics', file=sys.stderr)
+    print('expected 3423 rubrics, found ' + str(len(rubrics)) + ' rubrics', file=sys.stderr)
     for rubric in rubrics:
         rubric = re.sub('\<P 1\> \-\[PALEA\.\+', '', rubric) # remove Palea tag.
         rubric = re.sub(re.compile('\-\[.*?\]\+', re.S), '', rubric)
