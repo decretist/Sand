@@ -12404,7 +12404,7 @@ clericis, gradu proprio penitus abiciantur.
 <T T> Si clerici aut monachi inuenti fuerint conspirantes,
 aut per coniurationem calumpniam machinantes episcopis
 uel clericis, proprium amittant gradum.
-<4 25> -XXV.+ De eodem.
+<4 25> -XXV.+ <T R> De eodem.
 <T I> Item ex Concilio Aurelianensi. -[III. c. 21.]+
 <T T> Si qui clericorum (ut nuper in multis locis per
 superbiam diabolo instigante actum fuisse perpatuit)
