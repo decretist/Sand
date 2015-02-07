@@ -2,7 +2,7 @@
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 # 23 January 2015 -
-# 3 February 2015
+# 7 February 2015
 #
 from __future__ import print_function
 import re
@@ -11,9 +11,11 @@ citation_stack = []
 table_of_contents = []
 dictionary = {}
 def parse_decretum():
-    parse_part_1(preprocess(open('./part_1.txt', 'r').read()))
-    parse_part_2(preprocess(open('./part_2.txt', 'r').read()))
-    parse_part_3(preprocess(open('./part_3.txt', 'r').read()))
+    file = open('./edF.txt', 'r').read()
+    m = re.search('(\<1 D\>.*?)(\<1 C\>.*?)(\<1 DC\>.*?)$', file, re.S)
+    parse_part_1(preprocess(m.group(1)))
+    parse_part_2(preprocess(m.group(2)))
+    parse_part_3(preprocess(m.group(3)))
     return(table_of_contents, dictionary)
 
 # D.1-101
@@ -42,29 +44,25 @@ def parse_questions(text):
     questions = re.findall('(\<3 \d{1,2}\>.*?)(?=\<3 \d{1,2}\>|$)', text)
     for question in questions:
         question = question.strip(' ')
-        m = re.match('\<3 (\d{1,2})\> (\<T A\>) (.*?) (?=\<4 1\>)', question)
-        if m:
-            citation_stack.append('q.' + m.group(1))
-            add_to_dictionary('d.a.c.1', (m.group(2), m.group(3)))
+        m0 = re.match('\<3 (\d{1,2})\> (\<T A\>) (.*?) (?=\<1 DP\>)', question) # C.33 q.3 (de Pen.)
+        m1 = re.match('\<3 (\d{1,2})\> (\<T A\>) (.*?) (?=\<4 1\>)', question)
+        m2 = re.match('\<3 (\d{1,2})\> (\<T A\>) (.*?)$', question) # C.11 q.2, C.17 q.3, C.22 q.3, C.29 q.1
+        if m0:
+            citation_stack.append('q.' + m0.group(1))
+            add_to_dictionary('d.a.c.1', (m0.group(2), m0.group(3)))
+            tmp_q = citation_stack.pop() # pop 'q.3'
+            tmp_C = citation_stack.pop() # pop 'C.33'
+            parse_de_pen(question)
+            citation_stack.append(tmp_C) # push 'C.33'
+            citation_stack.append(tmp_q) # push 'q.3'
+        elif m1:
+            citation_stack.append('q.' + m1.group(1))
+            add_to_dictionary('d.a.c.1', (m1.group(2), m1.group(3)))
             parse_canons(question)
-            citation_stack.pop()
-        else:
-            parse_special_case_questions(question)
-
-def parse_special_case_questions(question):
-    # parse special-case questions C.11 q.2, C.17 q.3, C.22 q.3, C.29 q.1, 
-    # and C.33 q.3 (de Pen.)
-    m = re.match('\<3 (\d{1,2})\> (\<T A\>) (.+)', question)
-    citation_stack.append('q.' + m.group(1))
-    add_to_dictionary('d.a.c.1', (m.group(2), m.group(3)))
-    citation = ' '.join(citation_stack)
-    if citation == 'C.33 q.3': # de Pen.
-        tmp_q = citation_stack.pop() # pop 'q.3'
-        tmp_C = citation_stack.pop() # pop 'C.33'
-        parse_de_pen(preprocess(open('./de_pen.txt', 'r').read()))
-        citation_stack.append(tmp_C) # push 'C.33'
-        citation_stack.append(tmp_q) # push 'q.3'
-    citation_stack.pop()
+        elif m2:
+            citation_stack.append('q.' + m2.group(1))
+            add_to_dictionary('d.a.c.1', (m2.group(2), m2.group(3)))
+        citation_stack.pop()
 
 # de Penitentia
 def parse_de_pen(text):
