@@ -40,6 +40,16 @@ def parse_part_2(text):
         parse_questions(case)
         citation_stack.pop()
 
+# de Consecratione
+def parse_part_3(text):
+    distinctions = re.findall('(?:\<1 DC\>)(.*?)(?=\<1 DC\>|$)', text)
+    for distinction in distinctions:
+        distinction = distinction.strip(' ')
+        m = re.match('\<2 (\d)\> (?=\<4 1\>)', distinction)
+        citation_stack.append('de Cons. D.' + m.group(1))
+        parse_canons(distinction)
+        citation_stack.pop()
+
 def parse_questions(text):
     questions = re.findall('(\<3 \d{1,2}\>.*?)(?=\<3 \d{1,2}\>|$)', text)
     for question in questions:
@@ -72,16 +82,6 @@ def parse_de_pen(text):
         m = re.match('\<2 (\d)\> (\<T A\>) (.*?) (?=\<4 1\>)', distinction)
         citation_stack.append('de Pen. D.' + m.group(1))
         add_to_dictionary('d.a.c.1', (m.group(2), m.group(3)))
-        parse_canons(distinction)
-        citation_stack.pop()
-
-# de Consecratione
-def parse_part_3(text):
-    distinctions = re.findall('(?:\<1 DC\>)(.*?)(?=\<1 DC\>|$)', text)
-    for distinction in distinctions:
-        distinction = distinction.strip(' ')
-        m = re.match('\<2 (\d)\> (?=\<4 1\>)', distinction)
-        citation_stack.append('de Cons. D.' + m.group(1))
         parse_canons(distinction)
         citation_stack.pop()
 
