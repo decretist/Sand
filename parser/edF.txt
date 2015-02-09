@@ -24117,8 +24117,8 @@ causam suam dicendam, electorum iudicum die statuta
 litteris euocatus, minime occurrerit, hoc est (nisi aliena preoccupauerit
 necessitas) infra spatium duorum uel trium
 mensium, uel eo amplius, prout causa dictauerit.
-<T P> -[Gratian.]+ Codicis libro IX. titulo de accusationibus et inscriptionibus -[l. 3.]+
-Inp. Alexander: Reos capitalium criminum absentes
+<T I> -[Gratian.]+ Codicis libro IX. titulo de accusationibus et inscriptionibus -[l. 3.]+
+Inp. Alexander: <T T> Reos capitalium criminum absentes
 etiam per procuratores defendi leges publicorum iudiciorum
 permittunt.
 <T P> -Gratian.+ -@. 1.+ Ecce episcopus si inpeditus et causae
@@ -24926,7 +24926,7 @@ et det iudices. Si autem probauerit talem causam
 ut ea non refricentur, que acta sunt, que decreuerit
 Romanus episcopus confirmata erunt. Si hoc ergo omnibus
 placet, statuatur." Sinodus respondit: Placet.
-<T P> Codicis libro IV. titulo de probationibus: Actor, quod asseuerat
+<T I> Codicis libro IV. titulo de probationibus: <T T> Actor, quod asseuerat
 profitendo se probare non posse, reum necessitate
 monstrandi contrarium non astringit, cum per rerum naturam
 factum negantis probatio nulla sit.
