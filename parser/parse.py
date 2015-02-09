@@ -10,7 +10,7 @@ import sys
 citation_stack = []
 table_of_contents = []
 dictionary = {}
-def parse_decretum():
+def parse_all():
     file = open('./edF.txt', 'r').read()
     m = re.search('(\<1 D\>.*?)(\<1 C\>.*?)(\<1 DC\>.*?)$', file, re.S)
     parse_part_1(preprocess(m.group(1)))

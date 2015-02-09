@@ -2,16 +2,16 @@
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 # 5 February 2015 -
-# 6 February 2015
+# 8 February 2015
 #
 from __future__ import print_function
 import re
 import sys
-import parse_decretum
-def main():
+import parse
+def xform():
     toc_Fr = []
     dictionary_Fr = {}
-    (canons, intermediate) = parse_decretum.parse_decretum()
+    (canons, intermediate) = parse.parse_all()
     for canon in canons:
         for node in intermediate[canon]:
             tag = node[0]
@@ -53,15 +53,7 @@ def main():
                 else:
                     toc_Fr.append(key)
                 dictionary_Fr[key] = text
-
-    # print(dictionary_Fr['D.32 c.6'])
-    # print(dictionary_Fr['D.54 c.22'])
-    # print(dictionary_Fr['C.4 q.4 c.2'])
-    # print(dictionary_Fr['C.5 q.3 c.1'])
-    # print(dictionary_Fr['C.13 q.2 c.8'])
-    # print(dictionary_Fr['C.16 q.1 c.40'])
-    # print(dictionary_Fr['C.16 q.3 c.16'])
-    # print(dictionary_Fr['C.33 q.2 c.11'])
+    return(toc_Fr, dictionary_Fr)
 
 if __name__ == '__main__':
     main()
