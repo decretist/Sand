@@ -11,8 +11,9 @@ def parse_all():
     part_list = []
     file = open('./edF.txt', 'r').read()
     m = re.search('(\<1 D\>.*?)(\<1 C\>.*?)(\<1 DC\>.*?)$', file, re.S)
-    part_list.append(parse_part_1(preprocess(m.group(1))))
-    part_list.append(parse_part_3(preprocess(m.group(3))))
+    # part_list.append(parse_part_1(preprocess(m.group(1))))
+    part_list.append(parse_part_2(preprocess(m.group(2))))
+    # part_list.append(parse_part_3(preprocess(m.group(3))))
     return(part_list)
 
 # D.1-101
@@ -25,6 +26,16 @@ def parse_part_1(text):
         distinction_list.append((m.group(1), parse_canons(m.group(4))))
     return(distinction_list)
 
+# C.1-36
+def parse_part_2(text):
+    case_list = []
+    cases = re.findall('(?:\<1 C\>)(.*?)(?=\<1 C\>|$)', text)
+    for case in cases:
+        case = case.strip(' ')
+        m = re.match('(\<2 \d{1,2}\>)(\<T Q\>) (.*?) (\<3 1\>.*?)$', case)
+        case_list.append((m.group(1), parse_questions(m.group(4))))
+    return(case_list)
+
 # de Consecratione
 def parse_part_3(text):
     distinction_list = []
@@ -35,6 +46,21 @@ def parse_part_3(text):
         distinction_list.append((m.group(1), parse_canons(m.group(2))))
     return(distinction_list)
 
+def parse_questions(text):
+    questions = re.findall('(\<3 \d{1,2}\>.*?)(?=\<3 \d{1,2}\>|$)', text)
+    for question in questions:
+        question = question.strip(' ')
+        m0 = re.match('(\<3 \d{1,2}\>) (\<T A\>) (.*?) (\<1 DP\>.*?)$', question) # C.33 q.3 (de Pen.)
+        m1 = re.match('(\<3 \d{1,2}\>) (\<T A\>) (.*?) (\<4 1\>.*?)$', question)
+        m2 = re.match('(\<3 \d{1,2}\>) (\<T A\>) (.*?)$', question) # C.11 q.2, C.17 q.3, C.22 q.3, C.29 q.1
+        if m0:
+            # parse_de_pen(question)
+            pass
+        elif m1:
+            parse_canons(m1.group(4))
+        elif m2:
+            pass
+
 # return list of canons
 def parse_canons(text):
     canon_list = []
@@ -42,7 +68,12 @@ def parse_canons(text):
     for canon in canons:
         canon = canon.strip(' ')
         m = re.match('(\<4 \d{1,3}\>) (.*?)$', canon)
-        canon_list.append((m.group(1), parse_nodes(m.group(2))))
+        if m:
+            nodes = parse_nodes(m.group(2))
+        else: # C.1 q.4 c.6
+            m = re.match('(\<4 \d{1,3}\>)$', canon)
+            nodes = []
+        canon_list.append((m.group(1), nodes))
     return(canon_list)
 
 # return list of leaf nodes (tag-text tuples)
