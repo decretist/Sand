@@ -2,18 +2,17 @@
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 # 23 January 2015 -
-# 9 February 2015
+# 11 February 2015
 #
 from __future__ import print_function
 import re
 import sys
-def parse_all():
+def parse_all(text):
     part_list = []
-    file = open('./edF.txt', 'r').read()
-    m = re.search('(\<1 D\>.*?)(\<1 C\>.*?)(\<1 DC\>.*?)$', file, re.S)
-    # part_list.append(parse_part_1(preprocess(m.group(1))))
-    part_list.append(parse_part_2(preprocess(m.group(2))))
-    # part_list.append(parse_part_3(preprocess(m.group(3))))
+    m = re.search('(\<1 D\>.*?)(\<1 C\>.*?)(\<1 DC\>.*?)$', text, re.S)
+    part_list.append(('<1 D>', parse_part_1(m.group(1))))
+    part_list.append(('<1 C>', parse_part_1(m.group(2))))
+    part_list.append(('<1 DC>', parse_part_1(m.group(3))))
     return(part_list)
 
 # D.1-101
@@ -23,7 +22,11 @@ def parse_part_1(text):
     for distinction in distinctions:
         distinction = distinction.strip(' ')
         m = re.match('(\<2 \d{1,3}\>) (\<T A\>) (.*?) (\<4 1\>.*?)$', distinction)
-        distinction_list.append((m.group(1), parse_canons(m.group(4))))
+        tag = m.group(1)
+        node = (m.group(2), m.group(3)) # d.a.c.1 tag-text tuple
+        canons = parse_canons(m.group(4))
+        canons.insert(0, node)
+        distinction_list.append((tag, canons))
     return(distinction_list)
 
 # C.1-36
@@ -33,7 +36,11 @@ def parse_part_2(text):
     for case in cases:
         case = case.strip(' ')
         m = re.match('(\<2 \d{1,2}\>)(\<T Q\>) (.*?) (\<3 1\>.*?)$', case)
-        case_list.append((m.group(1), parse_questions(m.group(4))))
+        tag = m.group(1)
+        node = (m.group(2), m.group(3)) # d.init. tag-text tuple
+        questions = parse_questions(m.group(4))
+        questions.insert(0, node)
+        case_list.append((tag, questions))
     return(case_list)
 
 # de Consecratione
@@ -47,6 +54,7 @@ def parse_part_3(text):
     return(distinction_list)
 
 def parse_questions(text):
+    question_list = []
     questions = re.findall('(\<3 \d{1,2}\>.*?)(?=\<3 \d{1,2}\>|$)', text)
     for question in questions:
         question = question.strip(' ')
@@ -54,12 +62,23 @@ def parse_questions(text):
         m1 = re.match('(\<3 \d{1,2}\>) (\<T A\>) (.*?) (\<4 1\>.*?)$', question)
         m2 = re.match('(\<3 \d{1,2}\>) (\<T A\>) (.*?)$', question) # C.11 q.2, C.17 q.3, C.22 q.3, C.29 q.1
         if m0:
-            # parse_de_pen(question)
-            pass
+            question_list.append((m0.group(1), parse_de_pen(m0.group(4))))
         elif m1:
-            parse_canons(m1.group(4))
+            question_list.append((m1.group(1), parse_canons(m1.group(4))))
         elif m2:
-            pass
+            question_list.append((m2.group(1), [(m2.group(2), m2.group(3))]))
+    return(question_list)
+
+# de Penitentia
+def parse_de_pen(text):
+    distinction_list = []
+    distinctions = re.findall('(?:\<1 DP\>)(.*?)(?=\<1 DP\>|$)', text)
+    for distinction in distinctions:
+        distinction = distinction.strip(' ')
+        m = re.match('(\<2 \d\>) (\<T A\>) (.*?) (\<4 1\>.*?)$', distinction)
+        # d.a.c.1
+        distinction_list.append((m.group(1), parse_canons(m.group(4))))
+    return(distinction_list)
 
 # return list of canons
 def parse_canons(text):
@@ -85,15 +104,6 @@ def parse_nodes(text):
         m = re.match('(\<T [AIPRT]\>) (.*?)$', node)
         node_list.append((m.group(1), m.group(2)))
     return(node_list)
-
-def preprocess(text):
-    text = re.sub(re.compile('\-.*?\+', re.S), '', text) # remove comments
-    text = re.sub('\<S \d{1,4}\>', '', text) # remove page number tags
-    text = re.sub('\<L \d{1,2}\>', '', text) # remove line number tags
-    text = re.sub('\<P 1\>|\<P 0\>', '', text) # remove Palea tags
-    text = re.sub('\s+', ' ', text) # remove multiple whitespace characters
-    text = re.sub('\s+$', '', text) # remove trailing whitespace characters
-    return(text)
 
 if __name__ == '__main__':
     main()
