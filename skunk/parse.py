@@ -24,9 +24,9 @@ def parse_part_1(text):
         m = re.match('(\<2 \d{1,3}\>) (\<T A\>) (.*?) (\<4 1\>.*?)$', distinction)
         tag = m.group(1)
         node = (m.group(2), m.group(3)) # d.a.c.1 tag-text tuple
-        canons = parse_canons(m.group(4))
-        canons.insert(0, node)
-        distinction_list.append((tag, canons))
+        canon_list = parse_canons(m.group(4))
+        canon_list.insert(0, node)
+        distinction_list.append((tag, canon_list))
     return(distinction_list)
 
 # C.1-36
@@ -38,9 +38,9 @@ def parse_part_2(text):
         m = re.match('(\<2 \d{1,2}\>)(\<T Q\>) (.*?) (\<3 1\>.*?)$', case)
         tag = m.group(1)
         node = (m.group(2), m.group(3)) # d.init. tag-text tuple
-        questions = parse_questions(m.group(4))
-        questions.insert(0, node)
-        case_list.append((tag, questions))
+        question_list = parse_questions(m.group(4))
+        question_list.insert(0, node)
+        case_list.append((tag, question_list))
     return(case_list)
 
 # de Consecratione
@@ -50,7 +50,9 @@ def parse_part_3(text):
     for distinction in distinctions:
         distinction = distinction.strip(' ')
         m = re.match('(\<2 \d\>) (\<4 1\>.*?)$', distinction)
-        distinction_list.append((m.group(1), parse_canons(m.group(2))))
+        tag = m.group(1)
+        canon_list = parse_canons(m.group(2))
+        distinction_list.append((tag, canon_list))
     return(distinction_list)
 
 def parse_questions(text):
@@ -64,6 +66,7 @@ def parse_questions(text):
         if m0:
             tag = m0.group(1)
             node = (m0.group(2), m0.group(3)) # d.a.c.1 tag-text tuple
+            # need to figure out how distinction_list gets parented
             distinction_list = parse_de_pen(m0.group(4))
             question_list.append((tag, [node]))
         elif m1: # normal case
@@ -87,9 +90,9 @@ def parse_de_pen(text):
         m = re.match('(\<2 \d\>) (\<T A\>) (.*?) (\<4 1\>.*?)$', distinction)
         tag = m.group(1)
         node = (m.group(2), m.group(3)) # d.a.c.1 tag-text tuple
-        canons = parse_canons(m.group(4))
-        canons.insert(0, node)
-        distinction_list.append((tag, canons))
+        canon_list = parse_canons(m.group(4))
+        canon_list.insert(0, node)
+        distinction_list.append((tag, canon_list))
     return(distinction_list)
 
 # return list of canons
