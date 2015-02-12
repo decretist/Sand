@@ -2,7 +2,7 @@
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 # 8 February 2015 -
-# 11 February 2015
+# 12 February 2015
 #
 from __future__ import print_function
 import re
@@ -10,7 +10,21 @@ import sys
 import parse
 def main():
     file = open('./edF.txt', 'r').read()
-    parse.parse_all(preprocess(file))
+    decretum = parse.parse_all(preprocess(file))
+    traverse(decretum[0])
+
+def traverse(tree):
+    for i in range(len(tree[1])):
+        subtree = tree[1][i]
+        if isinstance(subtree[1], list):
+            tag = subtree[0]
+            print(tag)
+            traverse(subtree)
+        elif isinstance(subtree[1], str):
+            tag = subtree[0]
+            text = subtree[1]
+            print(tag, text)
+    return            
 
 def preprocess(text):
     text = re.sub(re.compile('\-.*?\+', re.S), '', text) # remove comments
