@@ -76,8 +76,11 @@ def parse_de_pen(text):
     for distinction in distinctions:
         distinction = distinction.strip(' ')
         m = re.match('(\<2 \d\>) (\<T A\>) (.*?) (\<4 1\>.*?)$', distinction)
-        # d.a.c.1
-        distinction_list.append((m.group(1), parse_canons(m.group(4))))
+        tag = m.group(1)
+        node = (m.group(2), m.group(3)) # d.a.c.1 tag-text tuple
+        canons = parse_canons(m.group(4))
+        canons.insert(0, node)
+        distinction_list.append((tag, canons))
     return(distinction_list)
 
 # return list of canons
