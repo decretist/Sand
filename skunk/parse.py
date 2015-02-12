@@ -2,7 +2,7 @@
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 # 23 January 2015 -
-# 11 February 2015
+# 12 February 2015
 #
 from __future__ import print_function
 import re
@@ -11,8 +11,8 @@ def parse_all(text):
     part_list = []
     m = re.search('(\<1 D\>.*?)(\<1 C\>.*?)(\<1 DC\>.*?)$', text, re.S)
     part_list.append(('<1 D>', parse_part_1(m.group(1))))
-    part_list.append(('<1 C>', parse_part_1(m.group(2))))
-    part_list.append(('<1 DC>', parse_part_1(m.group(3))))
+    part_list.append(('<1 C>', parse_part_2(m.group(2))))
+    part_list.append(('<1 DC>', parse_part_3(m.group(3))))
     return(part_list)
 
 # D.1-101
@@ -62,11 +62,20 @@ def parse_questions(text):
         m1 = re.match('(\<3 \d{1,2}\>) (\<T A\>) (.*?) (\<4 1\>.*?)$', question)
         m2 = re.match('(\<3 \d{1,2}\>) (\<T A\>) (.*?)$', question) # C.11 q.2, C.17 q.3, C.22 q.3, C.29 q.1
         if m0:
-            question_list.append((m0.group(1), parse_de_pen(m0.group(4))))
-        elif m1:
-            question_list.append((m1.group(1), parse_canons(m1.group(4))))
+            tag = m0.group(1)
+            node = (m0.group(2), m0.group(3)) # d.a.c.1 tag-text tuple
+            distinction_list = parse_de_pen(m0.group(4))
+            question_list.append((tag, [node]))
+        elif m1: # normal case
+            tag = m1.group(1)
+            node = (m1.group(2), m1.group(3)) # d.a.c.1 tag-text tuple
+            canon_list = parse_canons(m1.group(4))
+            canon_list.insert(0, node)
+            question_list.append((tag, canon_list))
         elif m2:
-            question_list.append((m2.group(1), [(m2.group(2), m2.group(3))]))
+            tag = m2.group(2)
+            node = (m2.group(2), m2.group(3)) # d.a.c.1 tag-text tuple
+            question_list.append((tag, [node]))
     return(question_list)
 
 # de Penitentia
@@ -98,7 +107,7 @@ def parse_canons(text):
         canon_list.append((m.group(1), nodes))
     return(canon_list)
 
-# return list of leaf nodes (tag-text tuples)
+# return list of terminal nodes (tag-text tuples)
 def parse_nodes(text):
     node_list = []
     nodes = re.findall('(\<T [AIPRT]\>.*?)(?=\<T [AIPRT]\>|$)', text)
