@@ -66,10 +66,9 @@ def parse_questions(text):
         if m0:
             tag = m0.group(1)
             node = (m0.group(2), m0.group(3)) # d.a.c.1 tag-text tuple
-            # need to figure out how distinction_list gets parented
             distinction_list = parse_de_pen(m0.group(4))
-            question_list.append((tag, [node]))
-        elif m1: # normal case
+            question_list.append((tag, [node, ('<1 DP>', distinction_list)]))
+        elif m1:
             tag = m1.group(1)
             node = (m1.group(2), m1.group(3)) # d.a.c.1 tag-text tuple
             canon_list = parse_canons(m1.group(4))
