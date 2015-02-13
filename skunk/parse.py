@@ -75,7 +75,7 @@ def parse_questions(text):
             canon_list.insert(0, node)
             question_list.append((tag, canon_list))
         elif m2:
-            tag = m2.group(2)
+            tag = m2.group(1)
             node = (m2.group(2), m2.group(3)) # d.a.c.1 tag-text tuple
             question_list.append((tag, [node]))
     return(question_list)
