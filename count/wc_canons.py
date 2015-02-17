@@ -1,13 +1,14 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
+# 12 March 2014
 #
+from __future__ import print_function
 import re
 import sys
 def main():
-    f = open('../../Gratian/corrections/edF.txt', 'r')
+    f = open('../parser/edF.txt', 'r')
     file = f.read()
-    dictionary = {}
     # (?<=...) positive lookbehind assertion.
     canons = re.findall('(?:\<T T\>|(?<=\<T T\>))(.*?)'    # canon starts with text (<T T>) tag.
         '(?:'                   # non-capturing group.
@@ -16,10 +17,10 @@ def main():
             '\<3 \d{1,2}\>|'    # or number of question,
             '\<4 \d{1,3}\>|'    # or number of canon,
             '\<P 1\>|'          # or Palea,
-            # '\<T [AIPT]\>'    # or inscription or text tag.
-            '\<T [APT]\>'      # or dicta or text tag.
+            '\<T [AIPT]\>|'     # or dictum or inscription or text tag,
+            '$'                 # or end of file.
         ')', file, re.S)        # re.S (re.DOTALL) makes '.' special character match any character including newline.
-    # print('expected 4392 canons, found ' + str(len(canons)) + ' canons', file=sys.stderr)
+    # print('expected 4394 canons, found ' + str(len(canons)) + ' canons', file=sys.stderr)
     for canon in canons:
         canon = re.sub('\<S \d{1,4}\>\<L 1\> \-\d{1,4}\+', '', canon) # remove page and line number tags.
         canon = re.sub('\<P 1\> \-\[PALEA\.\+', '', canon) # remove Palea tag.
@@ -30,7 +31,6 @@ def main():
         canon = re.sub('\s+', ' ', canon)
         canon = re.sub('^\s+', '', canon) # remove leading whitespace characters
         canon = re.sub('\s+$', '', canon) # remove trailing whitespace characters
-
         print(canon)
 
 if __name__ == '__main__':
