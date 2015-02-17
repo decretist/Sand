@@ -13,17 +13,15 @@ def main():
     canons = re.findall('(?:\<T T\>|(?<=\<T T\>))(.*?)'    # canon starts with text (<T T>) tag.
         '(?:'                   # non-capturing group.
             '\<1 [CD][CP]?\>|'  # canon ends with major division,
-            '\<2 \d{1,3}\>|'    # or number of major division,
             '\<3 \d{1,2}\>|'    # or number of question,
             '\<4 \d{1,3}\>|'    # or number of canon,
-            '\<T [AIPT]\>|'     # or dictum or inscription or text tag,
+            '\<T [IPT]\>|'      # or dictum or inscription or text tag,
             '$'                 # or end of file.
         ')', file, re.S)        # re.S (re.DOTALL) makes '.' special character match any character including newline.
     # print('expected 4394 canons, found ' + str(len(canons)) + ' canons', file=sys.stderr)
     for canon in canons:
-        canon = re.sub('\<S \d{1,4}\>\<L 1\> \-\d{1,4}\+', '', canon) # remove page and line number tags.
+        canon = re.sub('\<S \d{1,4}\>\<L 1\>', '', canon) # remove page and line number tags.
         canon = re.sub('\<P 1\>', '', canon) # remove Palea tag.
-        canon = re.sub('\<T I\>', '', canon) # remove inscription tag.
         canon = re.sub('\<P 0\>', '', canon) # remove Palea tag.
         canon = re.sub('\-.*?\+', '', canon)
         canon = re.sub(re.compile('\-\[.*?\]\+', re.S), '', canon)
