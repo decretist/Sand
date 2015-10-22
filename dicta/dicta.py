@@ -1,7 +1,8 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python
 #
 # Paul Evans (10evans@cardinalmail.cua.edu)
 #
+from __future__ import print_function
 import re
 import sys
 def main():
@@ -144,14 +145,14 @@ def main():
 
     all = open('./tmp/Gratian1_Dicta.txt', 'w')
     count = 1
-    keys = tuple(open('./toc_r1_fixed.txt', 'r')) # uniq toc.txt > dedup.txt
+    keys = tuple(open('./toc_r1_wo_depen.txt', 'r')) # uniq toc.txt > dedup.txt
     for key in keys:
         key = key.rstrip()
         #
-        # print(key + '\n\n' + dictionary[key] + '\n')
+        print(dictionary[key])
         #
-        print('{:0=4}'.format(count) + ' _ ' + dictionary[key])
-        count = count + 1
+        # print('{:0=4}'.format(count) + ' _ ' + dictionary[key])
+        # count = count + 1
         #
         outfilename = './tmp/' + key + '.txt'
         each = open(outfilename, 'w')
