@@ -14,6 +14,9 @@ def main():
     corpus_importer.import_corpus('latin_models_cltk')
     sentence = 'Aeneadum genetrix, hominum divomque voluptas, alma Venus, caeli subter labentia signa quae mare navigerum, quae terras frugiferentis concelebras, per te quoniam genus omne animantum concipitur visitque exortum lumina solis.'
     sentence = sentence.lower()
+    jv_replacer = JVReplacer()
+    sentence = jv_replacer.replace(sentence)
+    print(sentence)
     lemmatizer = LemmaReplacer('latin')
     lemmatized_sentence = lemmatizer.lemmatize(sentence)
     print(lemmatized_sentence)
